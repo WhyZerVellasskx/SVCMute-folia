@@ -8,6 +8,7 @@ import co.aikar.commands.annotation.Description;
 import co.aikar.commands.annotation.Syntax;
 import net.envexus.svcmute.SVCMute;
 import net.envexus.svcmute.integrations.IntegrationManager;
+import net.envexus.svcmute.util.BukkitTasks;
 import net.envexus.svcmute.util.SQLiteHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -55,7 +56,8 @@ public class SVCMuteCommand extends BaseCommand {
         integrationManager.addMutedPlayer(playerUUID, unmuteTime);
 
         // Schedule unmute task
-        Bukkit.getScheduler().runTaskLater(plugin, () -> {
+
+        BukkitTasks.runTaskLaterAsync( () -> {
             Long storedUnmuteTime = db.getUnmuteTime(playerUUID.toString());
             if (storedUnmuteTime != null && storedUnmuteTime <= System.currentTimeMillis()) {
                 db.removeMute(playerUUID.toString());

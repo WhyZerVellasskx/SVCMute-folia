@@ -1,11 +1,13 @@
 package net.envexus.svcmute;
 
 import co.aikar.commands.BukkitCommandManager;
+import com.tcoded.folialib.FoliaLib;
 import de.maxhenkel.voicechat.api.BukkitVoicechatService;
 import net.envexus.svcmute.commands.SCVUnmuteCommand;
 import net.envexus.svcmute.commands.SVCMuteCommand;
 import net.envexus.svcmute.configuration.ConfigurationManager;
 import net.envexus.svcmute.integrations.IntegrationManager;
+import net.envexus.svcmute.util.BukkitTasks;
 import net.envexus.svcmute.util.SQLiteHelper;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -19,11 +21,14 @@ public final class SVCMute extends JavaPlugin {
     private MuteCheckPlugin voicechatPlugin;
     private SQLiteHelper sqliteHelper;
     private IntegrationManager integrationManager;
+    private FoliaLib foliaLib;
 
     @Override
     public void onEnable() {
         ConfigurationManager messageManager = new ConfigurationManager(this);
-
+        foliaLib = new FoliaLib(this);
+        BukkitTasks.setPlugin(this);
+        BukkitTasks.setFoliaLib(foliaLib);
         // Initialize SQLiteHelper
         sqliteHelper = new SQLiteHelper(this);
 

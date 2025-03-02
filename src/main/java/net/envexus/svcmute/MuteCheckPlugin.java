@@ -72,17 +72,22 @@ public class MuteCheckPlugin implements VoicechatPlugin {
 
             String remainingTime = integrationManager.getRemainingTime(player);
 
-            if (configurationManager.getConfig().getBoolean("actionbar", false)) {
+            if (remainingTime == null) { // I don't have time to figure it out, so please correct me.
                 Component raw = configurationManager.getLocaleString("actionbar.muted");
-                Component actionBarMessage = raw.replaceText(TextReplacementConfig.builder().match("%remaining_time%").replacement(remainingTime).build());
-                player.sendActionBar(actionBarMessage);
-            }
+                player.sendActionBar(raw);
+            } else {
+                if (configurationManager.getConfig().getBoolean("actionbar", false)) {
+                    Component raw = configurationManager.getLocaleString("actionbar.muted");
+                    Component actionBarMessage = raw.replaceText(TextReplacementConfig.builder().match("%remaining_time%").replacement(remainingTime).build());
+                    player.sendActionBar(actionBarMessage);
+                }
 
-            if (configurationManager.getConfig().getBoolean("message", false) && !notifiedPlayers.contains(player.getUniqueId())) {
-                Component raw = configurationManager.getLocaleString("actionbar.muted");
-                Component chatMessage = raw.replaceText(TextReplacementConfig.builder().match("%remaining_time%").replacement(remainingTime).build());
-                player.sendMessage(chatMessage);
-                notifiedPlayers.add(player.getUniqueId());
+                if (configurationManager.getConfig().getBoolean("message", false) && !notifiedPlayers.contains(player.getUniqueId())) {
+                    Component raw = configurationManager.getLocaleString("actionbar.muted");
+                    Component chatMessage = raw.replaceText(TextReplacementConfig.builder().match("%remaining_time%").replacement(remainingTime).build());
+                    player.sendMessage(chatMessage);
+                    notifiedPlayers.add(player.getUniqueId());
+                }
             }
         } else {
             notifiedPlayers.remove(player.getUniqueId());
